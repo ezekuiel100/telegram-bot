@@ -2,7 +2,7 @@ const TelegramBot = require("node-telegram-bot-api");
 require("dotenv").config();
 
 const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
-// const telegramBotToken = process.env.token;
+//const telegramBotToken = process.env.token;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
@@ -21,8 +21,11 @@ bot.on("message", async (msg) => {
   }
 });
 
+//restringir quem manda links
+//impedir encaminhamentos
+//img com links esta apagando msg do admin
+
 function DeleteGroupMessage(msg) {
-  console.log("deletar");
   bot.sendMessage(msg.chat.id, "PROIBIDO LINKS NO GRUPO!");
   bot.deleteMessage(msg.chat.id, msg.message_id);
 }
@@ -34,5 +37,3 @@ function GetGroupAdmins(msg) {
     });
   });
 }
-
-function RestrictGroupMember() {}
