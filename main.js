@@ -9,15 +9,19 @@ const bot = new TelegramBot(telegramBotToken, { polling: true });
 let Administradores = [];
 
 bot.on("message", async (msg) => {
-  if (msg?.entities && msg.entities[0].type == "url") {
-    await GetGroupAdmins(msg);
+  try {
+    if (msg?.entities && msg.entities[0].type == "url") {
+      await GetGroupAdmins(msg);
 
-    if (Administradores.includes(msg.from.id)) return;
-    DeleteGroupMessage(msg);
-  }
+      if (Administradores.includes(msg.from.id)) return;
+      DeleteGroupMessage(msg);
+    }
 
-  if ((msg.photo || msg.video) && msg.caption_entities[0].type == "url") {
-    DeleteGroupMessage(msg);
+    if ((msg.photo || msg.video) && msg.caption_entities[0].type == "url") {
+      DeleteGroupMessage(msg);
+    }
+  } catch (error) {
+    console.log("Erro: " + error.message);
   }
 });
 
