@@ -30,8 +30,12 @@ function DeleteGroupMessage(msg) {
 }
 
 async function GetGroupAdmins(msg) {
-  let admin = await bot.getChatAdministrators(msg.chat.id);
-  admin.map((adm) => Administradores.push(adm.user.id));
+  try {
+    let admin = await bot.getChatAdministrators(msg.chat.id);
+    admin.map((adm) => Administradores.push(adm.user.id));
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function restrictChatMember(msg) {
