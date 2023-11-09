@@ -11,6 +11,7 @@ let Administradores = [];
 bot.on("message", (msg) => {
   if (msg?.entities && msg.entities[0].type == "url") {
     GetGroupAdmins(msg).then(() => {
+      console.log(Administradores);
       DeleteGroupMessage(msg);
     });
   }
@@ -39,8 +40,6 @@ async function GetGroupAdmins(msg) {
 }
 
 function restrictChatMember(msg) {
-  let data = Date.now();
-  console.log(data);
   bot.restrictChatMember(msg.chat.id, msg.from.id, {
     can_send_messages: false,
   });
