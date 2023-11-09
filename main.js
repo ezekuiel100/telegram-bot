@@ -6,12 +6,13 @@ const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
-let Administradores = [];
+let Administradores;
 
 bot.on("message", (msg) => {
+  Administradores = [];
+
   if (msg?.entities && msg.entities[0].type == "url") {
     GetGroupAdmins(msg).then(() => {
-      console.log(Administradores);
       DeleteGroupMessage(msg);
     });
   }
@@ -25,6 +26,7 @@ bot.on("message", (msg) => {
 
 function DeleteGroupMessage(msg) {
   if (Administradores.includes(msg.from.id)) return;
+  console.log(Administradores);
   bot.sendMessage(msg.chat.id, "PROIBIDO LINKS NO GRUPO!");
   bot.deleteMessage(msg.chat.id, msg.message_id);
   restrictChatMember(msg);
@@ -35,7 +37,7 @@ async function GetGroupAdmins(msg) {
     let admin = await bot.getChatAdministrators(msg.chat.id);
     admin.map((adm) => Administradores.push(adm.user.id));
   } catch (error) {
-    console.log(error);
+    console.log("Erro:" + error);
   }
 }
 
