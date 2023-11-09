@@ -25,8 +25,11 @@ bot.on("message", (msg) => {
 });
 
 function DeleteGroupMessage(msg) {
+  console.log(Administradores.includes(msg.from.id));
+
   if (Administradores.includes(msg.from.id)) return;
   console.log(Administradores);
+
   bot.sendMessage(msg.chat.id, "PROIBIDO LINKS NO GRUPO!");
   bot.deleteMessage(msg.chat.id, msg.message_id);
   restrictChatMember(msg);
