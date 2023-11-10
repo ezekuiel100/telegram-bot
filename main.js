@@ -13,6 +13,8 @@ let forwardMessageAlert = "PROIBIDO ENCAMINHA MENSAGEM";
 bot.on("message", (msg) => {
   Administradores = [];
 
+  bot.setChatMenuButton({ nome: "ezequiel" });
+
   DeleteforwardMessage(msg);
 
   if (msg?.entities && msg.entities[0].type == "url") {
@@ -34,6 +36,7 @@ bot.on("message", (msg) => {
 
 function DeleteGroupMessage(msg, alertText) {
   if (Administradores.includes(msg.from.id) || msg.from.is_bot) return;
+  console.log("deletar");
   bot.sendMessage(msg.chat.id, alertText);
   bot.deleteMessage(msg.chat.id, msg.message_id);
   restrictChatMember(msg);
