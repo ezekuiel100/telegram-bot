@@ -11,11 +11,16 @@ let linkAlert = "PROIBIDO LINKS NO GRUPO!";
 let forwardMessageAlert = "PROIBIDO ENCAMINHA MENSAGEM";
 let proribitedWords = [
   "troco videos",
+  "troco vídeos",
+  "troco video",
   "trocar videos",
+  "troca videos",
+  "troca video",
+  "troca vídeo",
+  "trocar vídeos",
   "trocar conteudo",
   "troco conteudo",
   "troco conteúdo",
-  "troco video",
   "trocar video",
   "cp",
   "perv",
@@ -23,8 +28,6 @@ let proribitedWords = [
 
 bot.on("message", (msg) => {
   Administradores = [];
-
-  bot.setChatMenuButton({ nome: "ezequiel" });
 
   DeleteforwardMessage(msg);
 
