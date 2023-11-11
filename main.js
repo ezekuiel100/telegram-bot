@@ -9,6 +9,17 @@ const bot = new TelegramBot(telegramBotToken, { polling: true });
 let Administradores;
 let linkAlert = "PROIBIDO LINKS NO GRUPO!";
 let forwardMessageAlert = "PROIBIDO ENCAMINHA MENSAGEM";
+let proribitedWords = [
+  "troco videos",
+  "trocar videos",
+  "trocar conteudo",
+  "troco conteudo",
+  "troco conteúdo",
+  "troco video",
+  "trocar video",
+  "cp",
+  "perv",
+];
 
 bot.on("message", (msg) => {
   Administradores = [];
@@ -16,6 +27,12 @@ bot.on("message", (msg) => {
   bot.setChatMenuButton({ nome: "ezequiel" });
 
   DeleteforwardMessage(msg);
+
+  proribitedWords.map((palavra) => {
+    if (msg.text.toLowerCase().includes(palavra)) {
+      DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+    }
+  });
 
   if (msg?.entities && msg.entities[0].type == "url") {
     GetGroupAdmins(msg).then(() => {
@@ -36,7 +53,7 @@ bot.on("message", (msg) => {
 
 function DeleteGroupMessage(msg, alertText) {
   if (Administradores.includes(msg.from.id) || msg.from.is_bot) return;
-  console.log("deletar");
+
   bot.sendMessage(msg.chat.id, alertText);
   bot.deleteMessage(msg.chat.id, msg.message_id);
   restrictChatMember(msg);
