@@ -22,6 +22,10 @@ let proribitedWords = [
   "troco conteudo",
   "troco conteúdo",
   "trocar video",
+  "trocar vídeo",
+  "video pra trocar",
+  "videos pra trocar",
+  "video para trocar",
   "cp",
   "perv",
 ];
@@ -38,9 +42,7 @@ bot.on("message", (msg) => {
   });
 
   if (msg?.entities && msg.entities[0].type == "url") {
-    GetGroupAdmins(msg).then(() => {
-      DeleteGroupMessage(msg, linkAlert);
-    });
+    DeleteGroupMessage(msg, linkAlert);
   }
 
   if (
@@ -48,18 +50,18 @@ bot.on("message", (msg) => {
     msg.caption_entities &&
     msg.caption_entities[0]?.type == "url"
   ) {
-    GetGroupAdmins(msg).then(() => {
-      DeleteGroupMessage(msg, linkAlert);
-    });
+    DeleteGroupMessage(msg, linkAlert);
   }
 });
 
 function DeleteGroupMessage(msg, alertText) {
-  if (Administradores.includes(msg.from.id) || msg.from.is_bot) return;
+  GetGroupAdmins(msg).then(() => {
+    if (Administradores.includes(msg.from.id) || msg.from.is_bot) return;
 
-  bot.sendMessage(msg.chat.id, alertText);
-  bot.deleteMessage(msg.chat.id, msg.message_id);
-  restrictChatMember(msg);
+    bot.sendMessage(msg.chat.id, alertText);
+    bot.deleteMessage(msg.chat.id, msg.message_id);
+    restrictChatMember(msg);
+  });
 }
 
 async function GetGroupAdmins(msg) {
