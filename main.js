@@ -36,7 +36,7 @@ bot.on("message", (msg) => {
   DeleteforwardMessage(msg);
 
   proribitedWords.map((palavra) => {
-    if (msg.text.toLowerCase().includes(palavra)) {
+    if (msg.text?.toLowerCase().includes(palavra)) {
       DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
     }
   });
@@ -45,12 +45,15 @@ bot.on("message", (msg) => {
     DeleteGroupMessage(msg, linkAlert);
   }
 
+  console.log(msg.caption_entities && msg.caption_entities[0].type == "url");
+
   if (
     (msg.photo || msg.video) &&
     msg.caption_entities &&
     msg.caption_entities[0]?.type == "url"
   ) {
     DeleteGroupMessage(msg, linkAlert);
+    console.log("deletar");
   }
 });
 
