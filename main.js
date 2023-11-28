@@ -26,7 +26,7 @@ let proribitedWords = [
   "video pra trocar",
   "videos pra trocar",
   "video para trocar",
-  "cp",
+  " cp ",
   "perv",
 ];
 
@@ -45,15 +45,12 @@ bot.on("message", (msg) => {
     DeleteGroupMessage(msg, linkAlert);
   }
 
-  console.log(msg.caption_entities && msg.caption_entities[0].type == "url");
-
   if (
     (msg.photo || msg.video) &&
     msg.caption_entities &&
     msg.caption_entities[0]?.type == "url"
   ) {
     DeleteGroupMessage(msg, linkAlert);
-    console.log("deletar");
   }
 });
 
