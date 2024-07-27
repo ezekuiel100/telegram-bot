@@ -1,8 +1,8 @@
 const TelegramBot = require("node-telegram-bot-api");
 require("dotenv").config();
 
-const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
-//const telegramBotToken = process.env.token;
+// const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+const telegramBotToken = process.env.token;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
@@ -27,13 +27,74 @@ let proribitedWords = [
   "videos pra trocar",
   "video para trocar",
   " cp ",
+  "troca cp",
+  "Troca cp",
+  " Cp ",
   "perv",
+  "Troco grupos",
+  "Troco Grupos",
+  "troco grupos",
+  "troco grupo",
+  "Troco grupo",
+  "incesto",
+  "alguem tem grupo",
+  "alguem tem grupos",
+  "outro grupo",
+  "outro grupos",
+  "outros grupos",
+  "ipcam",
+  "troco link",
+  "troco links",
+  "trade",
+  "engano hetero",
+  "enganei esse",
+  "enganei",
+  "Enganei esse",
+  "Engano hetero",
+  "Trade",
+  "Tenho links",
+  "Tenho grupo",
+  "Tenho grupos",
+  "tenho grupos",
+  "tenho grupo",
+  "tr0co",
+  "troco",
+  "Troco",
+  "tr@c@",
+  "Tr0co",
+  "Tr@c@",
+  "Tr0c0",
+  "tr0c0",
+  "links",
+  "Links",
+  "criei um grupo",
+  "Tenho link",
+  "tenho links",
+  "tenho link",
+  "Troco links",
+  "trocar conteúdo",
+  "trocar conteudo",
+  "Trocar conteudo",
+  "Trocar conteúdo",
+  "Troco link",
+  "conteudo on",
+  "Conteudo on",
+  "vendo conteudo",
+  "Vendo conteudo",
+  "tem grupo",
+  "Tem grupo",
+  "quem quiser",
+  "Quem quiser",
+  "quem Quiser",
+  "sem limites",
+  "sem limite",
 ];
 
 bot.on("message", (msg) => {
   Administradores = [];
 
   DeleteforwardMessage(msg);
+  containsLettersAndNumbers(msg);
 
   proribitedWords.map((palavra) => {
     if (msg.text?.toLowerCase().includes(palavra)) {
@@ -86,4 +147,18 @@ function DeleteforwardMessage(msg) {
   if (msg.forward_from_chat) {
     DeleteGroupMessage(msg, forwardMessageAlert);
   }
+}
+
+function containsLettersAndNumbers(msg) {
+  const res = msg.text.split(" ").map((str) => {
+    const hasLetters = /[a-zA-Z]/.test(str);
+    const hasNumbers = /[0-9]/.test(str);
+    return hasLetters && hasNumbers;
+  });
+
+  res.forEach((el) => {
+    if (el) {
+      DeleteGroupMessage(msg, "Messagem Apagada!!");
+    }
+  });
 }
