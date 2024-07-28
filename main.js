@@ -1,4 +1,5 @@
 const TelegramBot = require("node-telegram-bot-api");
+const Tesseract = require("tesseract.js");
 require("dotenv").config();
 
 // const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -93,6 +94,14 @@ let proribitedWords = [
 bot.on("message", (msg) => {
   Administradores = [];
 
+  if (msg?.photo) {
+    const fileId = msg?.photo[2].file_id;
+    bot.getFileLink(fileId).then((res) => {
+      console.log(res);
+      gewtImage(res, msg);
+    });
+  }
+
   DeleteforwardMessage(msg);
   containsLettersAndNumbers(msg);
 
@@ -150,15 +159,29 @@ function DeleteforwardMessage(msg) {
 }
 
 function containsLettersAndNumbers(msg) {
-  const res = msg.text.split(" ").map((str) => {
-    const hasLetters = /[a-zA-Z]/.test(str);
-    const hasNumbers = /[0-9]/.test(str);
-    return hasLetters && hasNumbers;
-  });
+  if (msg?.text) {
+    const res = msg.text.split(" ").map((str) => {
+      const hasLetters = /[a-zA-Z]/.test(str);
+      const hasNumbers = /[0-9]/.test(str);
+      return hasLetters && hasNumbers;
+    });
 
-  res.forEach((el) => {
-    if (el) {
-      DeleteGroupMessage(msg, "Messagem Apagada!!");
-    }
-  });
+    res.forEach((el) => {
+      if (el) {
+        DeleteGroupMessage(msg, "Messagem Apagada!!");
+      }
+    });
+  }
+}
+
+async function gewtImage(img, msg) {
+  const worker = await Tesseract.createWorker("eng");
+  const {
+    data: { text },
+  } = await worker.recognize(img);
+  console.log(text);
+  if (text.includes("CP")) {
+    DeleteGroupMessage(msg, "IMAGEM DELETADA");
+  }
+  await worker.terminate();
 }

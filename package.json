@@ -4,7 +4,8 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "node-telegram-bot-api": "^0.64.0"
+    "node-telegram-bot-api": "^0.64.0",
+    "tesseract.js": "^5.1.0"
   },
   "devDependencies": {
     "@railway/cli": "^3.5.1"
