@@ -89,6 +89,8 @@ let proribitedWords = [
   "quem Quiser",
   "sem limites",
   "sem limite",
+  "vendo video",
+  "vendo vídeo",
 ];
 
 bot.on("message", (msg) => {
@@ -97,7 +99,6 @@ bot.on("message", (msg) => {
   if (msg?.photo) {
     const fileId = msg?.photo[2].file_id;
     bot.getFileLink(fileId).then((res) => {
-      console.log(res);
       gewtImage(res, msg);
     });
   }
@@ -176,12 +177,18 @@ function containsLettersAndNumbers(msg) {
 
 async function gewtImage(img, msg) {
   const worker = await Tesseract.createWorker("eng");
+  const words = ["cp", "rt", "hate", "vendo"];
+
   const {
     data: { text },
   } = await worker.recognize(img);
-  console.log(text);
-  if (text.includes("CP")) {
-    DeleteGroupMessage(msg, "IMAGEM DELETADA");
-  }
+
+  words.forEach((word) => {
+    if (text.toLowerCase().includes(word)) {
+      console.log(text);
+      DeleteGroupMessage(msg, "IMAGEM DELETADA");
+    }
+  });
+
   await worker.terminate();
 }
