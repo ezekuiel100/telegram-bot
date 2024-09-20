@@ -2,8 +2,8 @@ const TelegramBot = require("node-telegram-bot-api");
 const Tesseract = require("tesseract.js");
 require("dotenv").config();
 
-// const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
-const telegramBotToken = process.env.token;
+const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+// const telegramBotToken = process.env.token;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
@@ -91,6 +91,11 @@ let proribitedWords = [
   "sem limite",
   "vendo video",
   "vendo vídeo",
+  "trc",
+  "cambiar",
+  "algum grupo",
+  "alguem tem grupo",
+  "grupo de novinhos",
 ];
 
 bot.on("message", (msg) => {
@@ -177,7 +182,7 @@ function containsLettersAndNumbers(msg) {
 
 async function gewtImage(img, msg) {
   const worker = await Tesseract.createWorker("eng");
-  const words = ["cp", "rt", "hate", "vendo"];
+  const words = ["cp", "hate", "vendo"];
 
   const {
     data: { text },
