@@ -96,6 +96,9 @@ let proribitedWords = [
   "algum grupo",
   "alguem tem grupo",
   "grupo de novinhos",
+  "grupo so pra",
+  "grupo so para",
+  "grupo só para",
 ];
 
 bot.on("message", (msg) => {
@@ -154,7 +157,7 @@ function restrictChatMember(msg) {
 
   bot.restrictChatMember(msg.chat.id, msg.from.id, {
     can_send_messages: false,
-    until_date: senconds + 100000,
+    until_date: senconds + 200000,
   });
 }
 
