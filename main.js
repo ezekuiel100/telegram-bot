@@ -104,12 +104,12 @@ let proribitedWords = [
 bot.on("message", (msg) => {
   Administradores = [];
 
-  if (msg?.photo) {
-    const fileId = msg?.photo[2].file_id;
-    bot.getFileLink(fileId).then((res) => {
-      gewtImage(res, msg);
-    });
-  }
+  // if (msg?.photo) {
+  //   const fileId = msg?.photo[2].file_id;
+  //   bot.getFileLink(fileId).then((res) => {
+  //     getImage(res, msg);
+  //   });
+  // }
 
   DeleteforwardMessage(msg);
   containsLettersAndNumbers(msg);
@@ -183,7 +183,7 @@ function containsLettersAndNumbers(msg) {
   }
 }
 
-async function gewtImage(img, msg) {
+async function getImage(img, msg) {
   const worker = await Tesseract.createWorker("eng");
   const words = ["cp", "hate", "vendo"];
 
