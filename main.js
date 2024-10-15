@@ -2,8 +2,8 @@ const TelegramBot = require("node-telegram-bot-api");
 const Tesseract = require("tesseract.js");
 require("dotenv").config();
 
-const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
-// const telegramBotToken = process.env.token;
+// const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+const telegramBotToken = process.env.token;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
@@ -101,15 +101,23 @@ let proribitedWords = [
   "grupo só para",
 ];
 
+let worker 
+
+(async () => {
+   worker = await Tesseract.createWorker("eng");
+})()
+
+
 bot.on("message", (msg) => {
+
   Administradores = [];
 
-  // if (msg?.photo) {
-  //   const fileId = msg?.photo[2].file_id;
-  //   bot.getFileLink(fileId).then((res) => {
-  //     getImage(res, msg);
-  //   });
-  // }
+  if (msg?.photo) {
+    const fileId = msg?.photo[2].file_id;
+    bot.getFileLink(fileId).then((res) => {
+      getImage(res, msg);
+    });
+  }
 
   DeleteforwardMessage(msg);
   containsLettersAndNumbers(msg);
@@ -183,20 +191,24 @@ function containsLettersAndNumbers(msg) {
   }
 }
 
-async function getImage(img, msg) {
-  const worker = await Tesseract.createWorker("eng");
-  const words = ["cp", "hate", "vendo"];
 
+async function getImage(img, msg) {
+    
+  const memory = process.memoryUsage().rss / 1024 / 1024  
+  console.log(memory)
+
+  const words = ["cp", "hate", "vendo"];
+  
   const {
     data: { text },
   } = await worker.recognize(img);
-
+  
   words.forEach((word) => {
     if (text.toLowerCase().includes(word)) {
       console.log(text);
       DeleteGroupMessage(msg, "IMAGEM DELETADA");
     }
   });
-
-  await worker.terminate();
+  
+  // await worker.terminate();
 }
