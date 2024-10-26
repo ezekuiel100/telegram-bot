@@ -52,6 +52,7 @@ let proribitedWords = [
   "enganei",
   "Enganei esse",
   "Engano hetero",
+  "engana hetero",
   "Trade",
   "Tenho links",
   "Tenho grupo",
@@ -101,15 +102,13 @@ let proribitedWords = [
   "grupo só para",
 ];
 
-let worker 
+let worker;
 
 (async () => {
-   worker = await Tesseract.createWorker("eng");
-})()
-
+  worker = await Tesseract.createWorker("eng");
+})();
 
 bot.on("message", (msg) => {
-
   Administradores = [];
 
   if (msg?.photo) {
@@ -191,24 +190,22 @@ function containsLettersAndNumbers(msg) {
   }
 }
 
-
 async function getImage(img, msg) {
-    
-  const memory = process.memoryUsage().rss / 1024 / 1024  
-  console.log(memory)
+  const memory = process.memoryUsage().rss / 1024 / 1024;
+  console.log(memory);
 
   const words = ["cp", "hate", "vendo"];
-  
+
   const {
     data: { text },
   } = await worker.recognize(img);
-  
+
   words.forEach((word) => {
     if (text.toLowerCase().includes(word)) {
       console.log(text);
       DeleteGroupMessage(msg, "IMAGEM DELETADA");
     }
   });
-  
+
   // await worker.terminate();
 }
