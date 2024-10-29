@@ -47,6 +47,7 @@ let proribitedWords = [
   "troco link",
   "troco links",
   "trade",
+  "novinho enganado",
   "engano hetero",
   "enganei esse",
   "enganei",
@@ -119,7 +120,6 @@ bot.on("message", (msg) => {
   }
 
   DeleteforwardMessage(msg);
-  containsLettersAndNumbers(msg);
 
   proribitedWords.map((palavra) => {
     if (msg.text?.toLowerCase().includes(palavra)) {
@@ -129,6 +129,7 @@ bot.on("message", (msg) => {
 
   if (msg?.entities && msg.entities[0].type == "url") {
     DeleteGroupMessage(msg, linkAlert);
+    return;
   }
 
   if (
@@ -137,7 +138,10 @@ bot.on("message", (msg) => {
     msg.caption_entities[0]?.type == "url"
   ) {
     DeleteGroupMessage(msg, linkAlert);
+    return;
   }
+
+  containsLettersAndNumbers(msg);
 });
 
 function DeleteGroupMessage(msg, alertText) {
@@ -164,7 +168,7 @@ function restrictChatMember(msg) {
 
   bot.restrictChatMember(msg.chat.id, msg.from.id, {
     can_send_messages: false,
-    until_date: senconds + 200000,
+    until_date: senconds + 500000,
   });
 }
 
