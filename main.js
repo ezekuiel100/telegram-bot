@@ -112,12 +112,12 @@ let worker;
 bot.on("message", (msg) => {
   Administradores = [];
 
-  if (msg?.photo) {
-    const fileId = msg?.photo[2].file_id;
-    bot.getFileLink(fileId).then((res) => {
-      getImage(res, msg);
-    });
-  }
+  // if (msg?.photo) {
+  //   const fileId = msg?.photo[2].file_id;
+  //   bot.getFileLink(fileId).then((res) => {
+  //     getImage(res, msg);
+  //   });
+  // }
 
   DeleteforwardMessage(msg);
 
