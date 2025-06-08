@@ -105,19 +105,23 @@ let proribitedWords = [
 
 let worker;
 
+
 (async () => {
   worker = await Tesseract.createWorker("eng");
 })();
 
+
 bot.on("message", (msg) => {
   Administradores = [];
 
-  // if (msg?.photo) {
-  //   const fileId = msg?.photo[2].file_id;
-  //   bot.getFileLink(fileId).then((res) => {
-  //     getImage(res, msg);
-  //   });
-  // }
+  if (msg.new_chat_members) {
+    const chatId = msg.chat.id;
+    const messageId = msg.message_id;
+
+    bot.deleteMessage(chatId, messageId).catch((err) => {
+      console.error('Erro ao apagar mensagem:', err);
+    });
+  }
 
   DeleteforwardMessage(msg);
 
