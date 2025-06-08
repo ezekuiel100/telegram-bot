@@ -113,13 +113,18 @@ let worker;
 
 bot.on("message", (msg) => {
   Administradores = [];
+  const chatId = msg.chat.id;
+  const messageId = msg.message_id;
 
   if (msg.new_chat_members) {
-    const chatId = msg.chat.id;
-    const messageId = msg.message_id;
-
     bot.deleteMessage(chatId, messageId).catch((err) => {
       console.error('Erro ao apagar mensagem:', err);
+    });
+  }
+
+  if (msg.left_chat_member) {
+    bot.deleteMessage(chatId, messageId).catch((err) => {
+      console.error('Erro ao apagar mensagem de saída:', err);
     });
   }
 
