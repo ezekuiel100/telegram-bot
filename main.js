@@ -15,6 +15,10 @@ let proribitedWords = [
   "troco vídeos",
   "troco video",
   "trocar videos",
+  "trocar vd",
+  "troca vd",
+  "trocar vds",
+  "troca vds",
   "troca videos",
   "troca video",
   "troca vídeo",
@@ -104,7 +108,6 @@ let proribitedWords = [
 ];
 
 let worker;
-
 
 (async () => {
   worker = await Tesseract.createWorker("eng");
