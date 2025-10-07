@@ -31,6 +31,7 @@ let proribitedWords = [
   "video pra trocar",
   "videos pra trocar",
   "video para trocar",
+  "cp",
   " cp ",
   "troca cp",
   "Troca cp",
@@ -119,6 +120,7 @@ bot.on("message", (msg) => {
   const chatId = msg.chat.id;
   const messageId = msg.message_id;
 
+
   if (msg.new_chat_members) {
     bot.deleteMessage(chatId, messageId).catch((err) => {
       console.error('Erro ao apagar mensagem:', err);
@@ -135,6 +137,7 @@ bot.on("message", (msg) => {
 
   proribitedWords.map((palavra) => {
     if (msg.text?.toLowerCase().includes(palavra)) {
+      console.log("msggg")
       DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
     }
   });
