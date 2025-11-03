@@ -67,6 +67,8 @@ let proribitedWords = [
   "vendo video",
   "vendo vídeo",
   "trc",
+  "mucilon",
+  "muci",
   "cambiar",
   "algum grupo",
   "alguem tem grupo",
