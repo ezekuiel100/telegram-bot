@@ -28,7 +28,6 @@ let proribitedWords = [
   "outro grupo",
   "outro grupos",
   "outros grupos",
-  "ipcam",
   "troco link",
   "troco links",
   "novinho enganado",
