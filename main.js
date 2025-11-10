@@ -69,6 +69,11 @@ let proribitedWords = [
   "grupo so pra",
   "grupo so para",
   "grupo só para",
+  "videos de adolecentes",
+  "videos de adolecente",
+  "video de adolecente",
+  "video de adolescente",
+  "videos de adolescentes",
 ];
 
 let worker;
