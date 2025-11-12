@@ -50,6 +50,8 @@ let proribitedWords = [
   "tenho link",
   "Troco links",
   "Troco link",
+  "troco novinhos",
+  "troco novinho",
   "conteudo on",
   "Conteudo on",
   "vendo conteudo",
@@ -81,6 +83,11 @@ let proribitedWords = [
   "vídeos de novinhos",
   "videos de novinhos",
   "video de novinho",
+  "video novinho",
+  "video novinhos",
+  "videos novinhos",
+  "vídeos novinhos",
+  "vídeo novinho",
   "video de novinhos",
 ];
 
