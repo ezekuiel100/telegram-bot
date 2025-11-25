@@ -89,7 +89,9 @@ let proribitedWords = [
   "vídeos novinhos",
   "vídeo novinho",
   "video de novinhos",
-  "de tudo"
+  "de tudo",
+  "todo tipo de conteudo",
+  "todo tipo de conteúdo",
 ];
 
 let worker;
