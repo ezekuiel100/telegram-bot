@@ -1,111 +1,47 @@
-const TelegramBot = require("node-telegram-bot-api");
-const Tesseract = require("tesseract.js");
+const { DatabaseSync } = require('node:sqlite');
+const TelegramBot = require("node-telegram-bot-api")
 require("dotenv").config();
+
+const database = new DatabaseSync('database.db');
 
 const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
 // const telegramBotToken = process.env.token;
 
 const bot = new TelegramBot(telegramBotToken, { polling: true });
 
-let Administradores;
 let linkAlert = "PROIBIDO LINKS NO GRUPO!";
 let forwardMessageAlert = "PROIBIDO ENCAMINHA MENSAGEM";
-let proribitedWords = [
-  "cp",
-  " cp ",
-  "troca cp",
-  "Troca cp",
-  " Cp ",
-  "perv",
-  "Troco grupos",
-  "Troco Grupos",
-  "troco grupos",
-  "troco grupo",
-  "Troco grupo",
-  "incesto",
-  "alguem tem grupo",
-  "alguem tem grupos",
-  "outro grupo",
-  "outro grupos",
-  "outros grupos",
-  "troco link",
-  "troco links",
-  "novinho enganado",
-  "engano hetero",
-  "enganei esse",
-  "enganei",
-  "Enganei esse",
-  "Engano hetero",
-  "engana hetero",
-  "Tenho links",
-  "Tenho grupo",
-  "Tenho grupos",
-  "tenho grupos",
-  "tenho grupo",
-  "links",
-  "Links",
-  "criei um grupo",
-  "Tenho link",
-  "tenho links",
-  "tenho link",
-  "Troco links",
-  "Troco link",
-  "troco novinhos",
-  "troco novinho",
-  "conteudo on",
-  "Conteudo on",
-  "vendo conteudo",
-  "Vendo conteudo",
-  "tem grupo",
-  "Tem grupo",
-  "sem limites",
-  "sem limite",
-  "vendo video",
-  "vendo vídeo",
-  "mucilon",
-  "muci",
-  "cambiar",
-  "algum grupo",
-  "alguem tem grupo",
-  "grupo de novinhos",
-  "grupo so pra",
-  "grupo so para",
-  "grupo só para",
-  "videos de adolecentes",
-  "videos de adolecente",
-  "video de adolecente",
-  "video de adolescente",
-  "videos de adolescentes",
-  "videos adolessentes",
-  "vídeo adolescente",
-  "vídeo adolescentes",
-  "vídeos adolescentes",
-  "vídeos de novinhos",
-  "videos de novinhos",
-  "video de novinho",
-  "video novinho",
-  "video novinhos",
-  "videos novinhos",
-  "vídeos novinhos",
-  "vídeo novinho",
-  "video de novinhos",
-  "de tudo",
-  "todo tipo de conteudo",
-  "todo tipo de conteúdo",
-];
-
-let worker;
-
-(async () => {
-  worker = await Tesseract.createWorker("eng");
-})();
 
 
-bot.on("message", (msg) => {
-  Administradores = [];
+database.exec(`CREATE TABLE IF NOT EXISTS proibidas (
+  key INTEGER PRIMARY KEY,
+  value TEXT UNIQUE
+) STRICT
+`)
+
+// Matches "/banir [palavra]"
+bot.onText(/\/banir (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+  const palavra = match[1].toLowerCase().trim();
+
+  const admins = await GetGroupAdmins(msg)
+  const isAnonymousAdmin = (userId === 1087968824 && msg.sender_chat && msg.sender_chat.id === chatId);
+
+  if (admins.includes(userId) || isAnonymousAdmin) {
+    try {
+      const insert = database.prepare("INSERT INTO proibidas (value) VALUEs (?)")
+      insert.run(palavra)
+      console.log("Nova palavra proibida adicionada")
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+});
+
+bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const messageId = msg.message_id;
-
 
   if (msg.new_chat_members) {
     bot.deleteMessage(chatId, messageId).catch((err) => {
@@ -121,12 +57,12 @@ bot.on("message", (msg) => {
 
   DeleteforwardMessage(msg);
 
-  proribitedWords.map((palavra) => {
-    if (msg.text?.toLowerCase().includes(palavra)) {
-      console.log("msggg")
-      DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
-    }
-  });
+  const proribitedWord = database.prepare("SELECT * FROM proibidas WHERE value=?").get(msg.text.toLowerCase())
+  if (proribitedWord) {
+    console.log(proribitedWord)
+    DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+  }
+
 
   if (msg?.entities && msg.entities[0].type == "url") {
     DeleteGroupMessage(msg, linkAlert);
@@ -146,8 +82,8 @@ bot.on("message", (msg) => {
 });
 
 function DeleteGroupMessage(msg, alertText) {
-  GetGroupAdmins(msg).then(() => {
-    if (Administradores.includes(msg.from.id) || msg.from.is_bot) return;
+  GetGroupAdmins(msg).then((adm) => {
+    if (adm.includes(msg.from.id) || msg.from.is_bot) return;
 
     bot.sendMessage(msg.chat.id, alertText);
     bot.deleteMessage(msg.chat.id, msg.message_id);
@@ -158,7 +94,7 @@ function DeleteGroupMessage(msg, alertText) {
 async function GetGroupAdmins(msg) {
   try {
     let admin = await bot.getChatAdministrators(msg.chat.id);
-    admin.map((adm) => Administradores.push(adm.user.id));
+    return admin.map((adm) => adm.user.id);
   } catch (error) {
     console.log("Erro:" + error);
   }
@@ -195,22 +131,3 @@ function containsLettersAndNumbers(msg) {
   }
 }
 
-async function getImage(img, msg) {
-  const memory = process.memoryUsage().rss / 1024 / 1024;
-  console.log(memory);
-
-  const words = ["cp", "hate", "vendo"];
-
-  const {
-    data: { text },
-  } = await worker.recognize(img);
-
-  words.forEach((word) => {
-    if (text.toLowerCase().includes(word)) {
-      console.log(text);
-      DeleteGroupMessage(msg, "IMAGEM DELETADA");
-    }
-  });
-
-  // await worker.terminate();
-}
