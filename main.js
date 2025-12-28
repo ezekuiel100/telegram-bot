@@ -57,10 +57,13 @@ bot.on("message", async (msg) => {
 
   DeleteforwardMessage(msg);
 
-  const proribitedWord = database.prepare("SELECT * FROM proibidas WHERE value=?").get(msg.text.toLowerCase())
-  if (proribitedWord) {
-    console.log(proribitedWord)
-    DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+  if (msg.text) {
+    const proribitedWord = database.prepare("SELECT * FROM proibidas WHERE value=?").get(msg.text?.toLowerCase())
+    if (proribitedWord) {
+      console.log(proribitedWord)
+      DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+      return
+    }
   }
 
 
