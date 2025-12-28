@@ -58,11 +58,14 @@ bot.on("message", async (msg) => {
   DeleteforwardMessage(msg);
 
   if (msg.text) {
-    const proribitedWord = database.prepare("SELECT * FROM proibidas WHERE value=?").get(msg.text?.toLowerCase())
-    if (proribitedWord) {
-      console.log(proribitedWord)
+    const data = database.prepare("SELECT * FROM proibidas").all()
+    const text = msg.text.toLowerCase().split(" ")
+
+    const isForbidden = data.some(word => text.includes(word.value))
+
+    if (isForbidden) {
+      console.log("Palavra proibida detectada:", text);
       DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
-      return
     }
   }
 
@@ -86,11 +89,15 @@ bot.on("message", async (msg) => {
 
 function DeleteGroupMessage(msg, alertText) {
   GetGroupAdmins(msg).then((adm) => {
-    if (adm.includes(msg.from.id) || msg.from.is_bot) return;
+    try {
+      if (adm.includes(msg.from.id) || msg.from.is_bot) return;
 
-    bot.sendMessage(msg.chat.id, alertText);
-    bot.deleteMessage(msg.chat.id, msg.message_id);
-    restrictChatMember(msg);
+      bot.sendMessage(msg.chat.id, alertText);
+      bot.deleteMessage(msg.chat.id, msg.message_id);
+      restrictChatMember(msg);
+    } catch (err) {
+      console.log(err)
+    }
   });
 }
 
