@@ -84,7 +84,6 @@ bot.on("message", async (msg) => {
     return;
   }
 
-  containsLettersAndNumbers(msg);
 });
 
 function DeleteGroupMessage(msg, alertText) {
