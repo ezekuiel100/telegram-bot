@@ -59,13 +59,14 @@ bot.on("message", async (msg) => {
 
   if (msg.text) {
     const data = database.prepare("SELECT * FROM proibidas").all()
-    const text = msg.text.toLowerCase().split(" ")
+    const text = msg.text.toLowerCase()
 
-    const isForbidden = data.some(word => text.includes(word.value))
-
-    if (isForbidden) {
-      console.log("Palavra proibida detectada:", text);
-      DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+    for (i = 0; i < data.length; i++) {
+      if (text.includes(data[i].value)) {
+        console.log("Palavra proibida detectada:", text);
+        DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
+        return
+      }
     }
   }
 
