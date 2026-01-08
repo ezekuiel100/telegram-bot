@@ -63,6 +63,7 @@ bot.on("message", async (msg) => {
 
     for (i = 0; i < data.length; i++) {
       if (text.includes(data[i].value)) {
+        console.log("Palavra proibida:", data[i].value)
         console.log("Palavra proibida detectada:", text);
         DeleteGroupMessage(msg, "MENSAGEM APAGADA!");
         return
